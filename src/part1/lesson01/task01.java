@@ -1,7 +1,7 @@
-package part1.class01;
+package part1.lesson01;
 
 /**
- * Lesson 2, task 1
+ * Lesson 1, task 1
  * Hello World program with different exceptions
  * @author Alexander.Mamonov@protonmail.ch
  * @version 1.0
