@@ -1,16 +1,17 @@
 package part1.lesson01;
 
 /**
- * Lesson 1, task 1
- * Hello World program with different exceptions
+ * Урок 1, задание 1
+ * Написать программу ”Hello, World!”. В ходе выполнения программы она должна выбросить исключение и завершиться с ошибкой.
+ *
+ *         Смоделировав ошибку «NullPointerException»
+ *         Смоделировав ошибку «ArrayIndexOutOfBoundsException»
+ *         Вызвав свой вариант ошибки через оператор throw
+ *
  * @author Alexander.Mamonov@protonmail.ch
  * @version 1.0
 */
 public class task01 {
-    /**
-     * Main
-     * @param args Input String array
-     */
     public static void main(String[] args) {
         String[] input = new String[2];
 
@@ -32,15 +33,16 @@ public class task01 {
     }
 
     /**
-     * Generating exception
-     * @param input Users String array
+     * Генерация исключения
+     * @param input Пользовательский строковый массив
      * @throws NullPointerException
      * @throws ArrayIndexOutOfBoundsException
      * @throws Task01Exception
      */
     static void method(String[] input) throws NullPointerException, ArrayIndexOutOfBoundsException, Task01Exception {
-        //Selecting your exception: 0 = NullPointerException, 1 = ArrayIndexOutOfBoundsException, 2 = Task01Exception;
+        /** @value Выбор исключения: 0 = NullPointerException, 1 = ArrayIndexOutOfBoundsException, 2 = Task01Exception; */
         int exception = 1;
+
         exception_select(exception, input);
 
         for (int i = 0; i < input.length; i++) {
@@ -52,9 +54,9 @@ public class task01 {
     }
 
     /**
-     * Selecting exception type
+     * Метод выбора исключения
      * @param i 0 = NullPointerException, 1 = ArrayIndexOutOfBoundsException, 2 = Task01Exception
-     * @param input Users String array
+     * @param input Пользовательский строковый массив
      */
     static void exception_select(int i, String[] input){
         switch(i){
@@ -78,7 +80,4 @@ public class task01 {
     }
 }
 
-/**
- * Users exception
- */
 class Task01Exception extends Exception {}
