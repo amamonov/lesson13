@@ -33,8 +33,8 @@ public class task03 {
      */
     private static Object[] fill(Object[] arr) {
         for (int i = 0; i < arr.length; i++) {
-            //arr[i] = (Object)i;                                                       /* А так почти все работает */
-            arr[i] = letter_arr[i];
+            arr[i] = (Object)i;                                                       /* А так почти все работает */
+            //arr[i] = letter_arr[i];
         }
 
         return arr;
@@ -58,6 +58,7 @@ public class task03 {
 
         System.out.println(mtb.getArr());
         System.out.println(mtb.getSummator(mtb.getArr()));
+        System.out.println(mtb.getSplitter(mtb.getArr(), 2));
         System.out.println("Hash code is " + mtb.hashCode());
 
         Collection col = new HashSet();
@@ -75,6 +76,8 @@ public class task03 {
  */
 class MathBox3 extends ObjectBox {
     private static Collection<? extends Number> arr = new HashSet<>();
+    abstract class T extends Number{};
+
     static Collection col = new HashSet();                                               /* Временная коллекция */
 
     public MathBox3(Object[] number) {
@@ -102,11 +105,21 @@ class MathBox3 extends ObjectBox {
     private static Collection<? extends Number> splitter(Collection<? extends Number> arr, Number divisor) {
         List<Number> ls = new ArrayList<>();
         ls.addAll(arr);
+
+//        abstract class T extends Number{};
+//        List<T> list = new ArrayList<T>();
+//        list.addAll(arr);
+
 //        arr.clear();                                                          /* Сохраним исходный массив */
         for (int i = 0; i < ls.size(); i++) {
-            Number num = ls.get(i);
+            Number num = (Number)ls.get(i);
 //            arr.add(num);                                                     /* Инвариантность не позволяет */
+//            list.add(num);
         }
+//        while (arr.iterator().hasNext()) {
+//            System.out.println("Hello!");
+//        }
+
         return arr;
     }
 
