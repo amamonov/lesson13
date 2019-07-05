@@ -1,8 +1,6 @@
 package part1.lesson09;
 
 import org.apache.commons.jci.ReloadingClassLoader;
-
-
 import javax.tools.JavaCompiler;
 import javax.tools.ToolProvider;
 import java.io.*;
@@ -15,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
+import java.util.Properties;
 
 /**
  * Дан интерфейс
@@ -31,13 +30,29 @@ import java.util.Scanner;
  *     Файл SomeClass.java компилируется программой (в рантайме) в файл SomeClass.class.
  *     Полученный файл подгружается в программу с помощью кастомного загрузчика
  *     Метод, введенный с консоли, исполняется в рантайме (вызывается у экземпляра объекта подгруженного класса)
+ *
+ * @author Alexander.Mamonov@protonmail.ch
+ * @version 2.0
  */
 public class task01 {
     public static void main(String[] args) {
-        String readPath = "F:\\JavaProjects\\Innopolis\\src\\part1\\lesson09\\Worker.java";
-        String writePath = readPath;
+        Properties property = new Properties();
 
-        compileFile(writeFile(writePath, changeFile(readFile(readPath))));
+        try {
+            String fileprop = "F:\\JavaProjects\\Innopolis\\src\\part1\\lesson09\\resources\\config.properties";
+            FileInputStream fis = new FileInputStream(fileprop);
+            property.load(fis);
+            String path = property.getProperty("path");
+            String file = property.getProperty("file");
+            String importedClass = property.getProperty("importedClass");
+
+            writeFile(path + file, changeFile(readFile(path + file)));
+            compileFile(path, file, importedClass);
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
     private static List readFile(String readPath) {
@@ -70,7 +85,7 @@ public class task01 {
             line = iter.next().toString() ;
 //            System.out.println("Line = " + line);
 
-            if (line.endsWith("void doWork();")) {
+            if (line.endsWith("public void doWork() {")) {
                 finalArrayOfLines.add(line);
                 finalArrayOfLines.addAll(inputArrayOfLines);
             }
@@ -79,7 +94,7 @@ public class task01 {
             }
         }
 
-        System.out.println("Changed array: " + finalArrayOfLines);
+//        System.out.println("Changed array: " + finalArrayOfLines);
         return finalArrayOfLines;
     }
 
@@ -91,31 +106,22 @@ public class task01 {
 
             for (int i = 0; i < arrayOfLines.size(); i++) {
                 line = iter.next().toString() + "\n";
-                try {
-                    fos.write(line.getBytes());
-                }
-                catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-                System.out.println("Wroted line: " + line);
+                fos.write(line.getBytes());
+//                System.out.println("Line to write: " + line);
             }
         }
         catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        catch (IOException e) {
             e.printStackTrace();
         }
 
         return writePath;
     }
 
-    private static void compileFile(String path) {
-//        path = "F:\\JavaProjects\\Innopolis\\out\\production\\Innopolis\\part1\\lesson09\\Worker.class";
-
-        String lib = path.substring(0, 44);
-        String file = path.substring(45, 56);
-        System.out.println("path = " + lib + "; file = " + file);
-
-        Path rootPath = Paths.get(lib);
+    private static void compileFile(String path, String file, String importedClass) {
+        Path rootPath = Paths.get(path);
         Path javaFilePath = rootPath.resolve(file);
 
         JavaCompiler jc = ToolProvider.getSystemJavaCompiler();
@@ -128,45 +134,15 @@ public class task01 {
             e.printStackTrace();
         }
 
-        ReloadingClassLoader rlc = new ReloadingClassLoader(classLoader);
-//
-//        String lib = path.substring(0, 65);
-//        String file = path.substring(66, 78);
-//        System.out.println("path = " + lib + "; file = " + file);
-//
-//        Path rootPath = Paths.get(lib);
-//        Path javaFilePath = rootPath.resolve(file);
-//
-//        JavaCompiler jc = ToolProvider.getSystemJavaCompiler();
-//        jc.run(null, null, null, javaFilePath.toAbsolutePath().toString());
-//
-//        URLClassLoader classLoader = null;
-//        try {
-//            classLoader = URLClassLoader.newInstance(new URL[] { rootPath.toUri().toURL() });
-//        } catch (MalformedURLException e) {
-//            e.printStackTrace();
-//        }
-//
-//        Class<?> cls = null;
-//        try {
-//            cls = Class.forName(
-//                    file,
-//                    true,
-//                        classLoader);
-//        } catch (ClassNotFoundException e) {
-//            e.printStackTrace();
-//        }
-//
-//        Worker instance = null;
-//        try {
-//            instance = (Worker) cls.newInstance();
-//        } catch (InstantiationException e) {
-//            e.printStackTrace();
-//        } catch (IllegalAccessException e) {
-//            e.printStackTrace();
-//        }
-//
-//        instance.doWork();
+        ReloadingClassLoader rlc = new ReloadingClassLoader(classLoader); /* !!! */
+        try {
+            rlc.loadClass(importedClass);
+            Someclass scl = new Someclass();
+            scl.doWork();
+        }
+        catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
     private static List readConsole() {
@@ -179,7 +155,7 @@ public class task01 {
             line = input.nextLine();
             arrayOfLines.add(line);
 
-//            System.out.println("Your input line is " + line);
+//            System.out.println("Your inpuе line is " + line);
         }
 
         System.out.println("Your input array: " + arrayOfLines);
