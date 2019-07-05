@@ -1,7 +1,6 @@
-package part1.lesson04;
+package part1.lesson04.task02;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 
 /**
@@ -12,11 +11,11 @@ import java.util.Collection;
  *         Должен быть метод dump, выводящий содержимое коллекции в строку.
  *
  * @author Alexander.Mamonov@protonmail.ch
- * @version 1.0
+ * @version 2.0
  */
 public class task02 {
     public static void main(String[] args) {
-        Collection<Integer> icol = new ArrayList<>();           /* Testing different type of arrays */
+        Collection<Integer> icol = new ArrayList<>();           /* Тестируем различные типы массивов */
         ObjectBox ob = new ObjectBox(icol);
         test_commands(ob, "Integer");
 
@@ -59,24 +58,4 @@ public class task02 {
         ob.dump();
         ob.clear();
     }
-}
-
-class ObjectBox {
-    protected static Collection col = new ArrayList();
-
-    public ObjectBox(Collection col){ this.col = col; }
-
-    public boolean addObject(Object obj) { return col.add(obj); }
-
-    public boolean deleteObject(Object obj) {
-        if (col.contains(obj)) {
-            return col.remove(obj);
-        }
-
-        return false;
-    }
-
-    public void dump() { System.out.println("Your collection is " + col.toString()); }
-
-    public void clear() { col.clear(); }
 }
